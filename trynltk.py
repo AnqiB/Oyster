@@ -1,8 +1,8 @@
 import nltk
 import nltk.data
 import re #regular expression
-fileread=open('C:/Users/Baiaq/Desktop/Harry_Potter_and_the_Goblet_of_Fire.txt','r')
-filewrite=open('C:/Users/Baiaq/Desktop/outputHarry.txt','w')
+fileread=open('C:/Users/Baiaq/Desktop/text_preprocessing/10books/Rich_Dad_Poor_Dad.txt','r')
+filewrite=open('C:/Users/Baiaq/Desktop/text_preprocessing/10books/temp_Rich_Dad_Poor_Dad.txt','w')
 '''读入一段话，进行处理。之所以这样做是因为文本文件可能比较大，分块处理比较好。'''
 flag=0
 myset=list()
@@ -32,6 +32,9 @@ for line in fileread.readlines():
 
             pattern4=re.compile(r'\[.*\]') 
             string=pattern4.sub(r'',string)
+			
+            pattern5=re.compile(r';') 
+            string=pattern5.sub(r'.',string)
             
             sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
             sents = sent_detector.tokenize(string.strip())
@@ -71,16 +74,30 @@ for line in fileread.readlines():
                 pattern14=re.compile(r'\'s') 
                 sen=pattern14.sub(r' s',sen)
 
-                #除了字母，其它所有的符号都删除
-                sen=filter(lambda ch:ch in 'qwertyuiopasdfghjklzxcvbnm QWERTYUIOPASDFGHJKLZXCVBNM',sen)		
-				
+                #除了字母，其它所有的符号都替换成空格
+                pattern15=re.compile(r'[^a-zA-Z]+')
+                sen=pattern15.sub(r' ',sen)
+
+                #删除每行开头的空格
+                pattern16=re.compile(r'^[ ]')
+                sen=pattern16.sub(r'',sen)
+                
                 filewrite.write(sen)
                 filewrite.write('\n')
-                #print sen
+               
             del myset[:]
 
 fileread.close()
 filewrite.close()
+
+fread=open(r'C:/Users/Baiaq/Desktop/text_preprocessing/10books/temp_Rich_Dad_Poor_Dad.txt','r')
+fwrite=open(r'C:/Users/Baiaq/Desktop/text_preprocessing/10books/processed_Rich_Dad_Poor_Dad.txt','w')
+for line in fread.readlines():
+    templist=line.split(' 'or '\t')
+    if(line!='\n' and len(templist)>1): #调整这里的数字即可，>1就是单词数大于1的句子才输出
+        fwrite.write(line)
+fread.close()
+fwrite.close()
             
 
 
