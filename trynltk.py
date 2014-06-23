@@ -93,7 +93,8 @@ filewrite.close()
 fread=open(r'C:/Users/Baiaq/Desktop/text_preprocessing/10books/temp_Rich_Dad_Poor_Dad.txt','r')
 fwrite=open(r'C:/Users/Baiaq/Desktop/text_preprocessing/10books/processed_Rich_Dad_Poor_Dad.txt','w')
 for line in fread.readlines():
-    templist=line.split(' 'or '\t')
+    templist=line.strip() #remove spaces before and after the sentence
+    templist=templist.split(' 'or '\t')
     if(line!='\n' and len(templist)>1): #调整这里的数字即可，>1就是单词数大于1的句子才输出
         fwrite.write(line)
 fread.close()
